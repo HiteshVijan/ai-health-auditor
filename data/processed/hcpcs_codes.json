@@ -1,0 +1,218 @@
+{
+  "99211": {
+    "description": "Office visit, minimal",
+    "category": "E/M",
+    "rvu": 0.18,
+    "fair_price": 30.0
+  },
+  "99212": {
+    "description": "Office visit, straightforward",
+    "category": "E/M",
+    "rvu": 0.93,
+    "fair_price": 65.0
+  },
+  "99213": {
+    "description": "Office visit, low complexity",
+    "category": "E/M",
+    "rvu": 1.3,
+    "fair_price": 110.0
+  },
+  "99214": {
+    "description": "Office visit, moderate complexity",
+    "category": "E/M",
+    "rvu": 1.92,
+    "fair_price": 165.0
+  },
+  "99215": {
+    "description": "Office visit, high complexity",
+    "category": "E/M",
+    "rvu": 2.8,
+    "fair_price": 240.0
+  },
+  "99221": {
+    "description": "Initial hospital care, low",
+    "category": "Hospital",
+    "rvu": 1.92,
+    "fair_price": 165.0
+  },
+  "99222": {
+    "description": "Initial hospital care, moderate",
+    "category": "Hospital",
+    "rvu": 2.61,
+    "fair_price": 225.0
+  },
+  "99223": {
+    "description": "Initial hospital care, high",
+    "category": "Hospital",
+    "rvu": 3.86,
+    "fair_price": 330.0
+  },
+  "80048": {
+    "description": "Basic metabolic panel",
+    "category": "Lab",
+    "rvu": 0.0,
+    "fair_price": 25.0
+  },
+  "80053": {
+    "description": "Comprehensive metabolic panel",
+    "category": "Lab",
+    "rvu": 0.0,
+    "fair_price": 35.0
+  },
+  "80061": {
+    "description": "Lipid panel",
+    "category": "Lab",
+    "rvu": 0.0,
+    "fair_price": 40.0
+  },
+  "81001": {
+    "description": "Urinalysis, automated",
+    "category": "Lab",
+    "rvu": 0.0,
+    "fair_price": 12.0
+  },
+  "85025": {
+    "description": "Complete blood count (CBC)",
+    "category": "Lab",
+    "rvu": 0.0,
+    "fair_price": 20.0
+  },
+  "85027": {
+    "description": "CBC, automated",
+    "category": "Lab",
+    "rvu": 0.0,
+    "fair_price": 15.0
+  },
+  "87880": {
+    "description": "Strep test, rapid",
+    "category": "Lab",
+    "rvu": 0.0,
+    "fair_price": 25.0
+  },
+  "70553": {
+    "description": "MRI brain with/without contrast",
+    "category": "Imaging",
+    "rvu": 3.5,
+    "fair_price": 1500.0
+  },
+  "71046": {
+    "description": "Chest X-ray, 2 views",
+    "category": "Imaging",
+    "rvu": 0.22,
+    "fair_price": 75.0
+  },
+  "72148": {
+    "description": "MRI lumbar spine without contrast",
+    "category": "Imaging",
+    "rvu": 1.54,
+    "fair_price": 1200.0
+  },
+  "73721": {
+    "description": "MRI joint lower extremity",
+    "category": "Imaging",
+    "rvu": 1.54,
+    "fair_price": 1100.0
+  },
+  "74177": {
+    "description": "CT abdomen/pelvis with contrast",
+    "category": "Imaging",
+    "rvu": 3.2,
+    "fair_price": 800.0
+  },
+  "93000": {
+    "description": "Electrocardiogram (ECG/EKG)",
+    "category": "Cardiology",
+    "rvu": 0.17,
+    "fair_price": 50.0
+  },
+  "93306": {
+    "description": "Echocardiography, complete",
+    "category": "Cardiology",
+    "rvu": 1.3,
+    "fair_price": 450.0
+  },
+  "27447": {
+    "description": "Total knee replacement",
+    "category": "Surgery",
+    "rvu": 20.79,
+    "fair_price": 25000.0
+  },
+  "27130": {
+    "description": "Total hip replacement",
+    "category": "Surgery",
+    "rvu": 20.79,
+    "fair_price": 28000.0
+  },
+  "43239": {
+    "description": "Upper GI endoscopy with biopsy",
+    "category": "Surgery",
+    "rvu": 3.5,
+    "fair_price": 1500.0
+  },
+  "45380": {
+    "description": "Colonoscopy with biopsy",
+    "category": "Surgery",
+    "rvu": 4.43,
+    "fair_price": 2000.0
+  },
+  "99281": {
+    "description": "ED visit, self-limited",
+    "category": "Emergency",
+    "rvu": 0.45,
+    "fair_price": 150.0
+  },
+  "99282": {
+    "description": "ED visit, low urgency",
+    "category": "Emergency",
+    "rvu": 0.93,
+    "fair_price": 250.0
+  },
+  "99283": {
+    "description": "ED visit, moderate",
+    "category": "Emergency",
+    "rvu": 1.6,
+    "fair_price": 400.0
+  },
+  "99284": {
+    "description": "ED visit, high urgency",
+    "category": "Emergency",
+    "rvu": 2.74,
+    "fair_price": 650.0
+  },
+  "99285": {
+    "description": "ED visit, life-threatening",
+    "category": "Emergency",
+    "rvu": 4.0,
+    "fair_price": 1000.0
+  },
+  "96372": {
+    "description": "Therapeutic injection",
+    "category": "Injection",
+    "rvu": 0.17,
+    "fair_price": 35.0
+  },
+  "96374": {
+    "description": "IV push, single drug",
+    "category": "Infusion",
+    "rvu": 0.21,
+    "fair_price": 100.0
+  },
+  "96413": {
+    "description": "Chemotherapy IV infusion",
+    "category": "Infusion",
+    "rvu": 0.6,
+    "fair_price": 250.0
+  },
+  "00100": {
+    "description": "Anesthesia, salivary gland",
+    "category": "Anesthesia",
+    "rvu": 5.0,
+    "fair_price": 400.0
+  },
+  "00400": {
+    "description": "Anesthesia, skin surgery",
+    "category": "Anesthesia",
+    "rvu": 3.0,
+    "fair_price": 300.0
+  }
+}

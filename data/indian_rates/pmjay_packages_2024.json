@@ -1,0 +1,127 @@
+{
+  "meta": {
+    "source": "PMJAY - Pradhan Mantri Jan Arogya Yojana (Ayushman Bharat)",
+    "effective_date": "2024-01-01",
+    "currency": "INR",
+    "coverage": "Up to ₹5 lakh per family per year",
+    "notes": "Package rates for empaneled hospitals under Ayushman Bharat scheme"
+  },
+  "packages": {
+    "general_medicine": {
+      "fever_treatment": {"package_rate": 5000, "description": "Fever (Enteric, Viral)"},
+      "dengue_treatment": {"package_rate": 10000, "description": "Dengue Treatment"},
+      "malaria_treatment": {"package_rate": 6000, "description": "Malaria Treatment"},
+      "typhoid_treatment": {"package_rate": 8000, "description": "Typhoid Treatment"},
+      "pneumonia": {"package_rate": 12000, "description": "Pneumonia Treatment"},
+      "asthma_acute": {"package_rate": 8000, "description": "Acute Asthma Management"},
+      "copd": {"package_rate": 15000, "description": "COPD Management"},
+      "diabetes_management": {"package_rate": 5000, "description": "Diabetes Management (per episode)"}
+    },
+    "general_surgery": {
+      "appendectomy_open": {"package_rate": 18000, "description": "Open Appendectomy"},
+      "appendectomy_lap": {"package_rate": 25000, "description": "Laparoscopic Appendectomy"},
+      "hernia_inguinal_open": {"package_rate": 17000, "description": "Inguinal Hernia (Open)"},
+      "hernia_inguinal_lap": {"package_rate": 25000, "description": "Inguinal Hernia (Laparoscopic)"},
+      "hernia_umbilical": {"package_rate": 15000, "description": "Umbilical Hernia Repair"},
+      "cholecystectomy_open": {"package_rate": 20000, "description": "Open Cholecystectomy"},
+      "cholecystectomy_lap": {"package_rate": 30000, "description": "Laparoscopic Cholecystectomy"},
+      "hemorrhoidectomy": {"package_rate": 12000, "description": "Hemorrhoidectomy"},
+      "fistula_in_ano": {"package_rate": 15000, "description": "Fistula in Ano Surgery"},
+      "pilonidal_sinus": {"package_rate": 12000, "description": "Pilonidal Sinus Surgery"},
+      "intestinal_obstruction": {"package_rate": 30000, "description": "Intestinal Obstruction Surgery"},
+      "hydrocele": {"package_rate": 10000, "description": "Hydrocele Surgery"}
+    },
+    "orthopedics": {
+      "fracture_closed": {"package_rate": 8000, "description": "Closed Fracture Treatment"},
+      "fracture_open_small": {"package_rate": 20000, "description": "Open Fracture (Small Bone)"},
+      "fracture_open_long": {"package_rate": 40000, "description": "Open Fracture (Long Bone)"},
+      "hip_fracture": {"package_rate": 50000, "description": "Hip Fracture Surgery"},
+      "knee_replacement_unilateral": {"package_rate": 80000, "description": "Unilateral Knee Replacement"},
+      "knee_replacement_bilateral": {"package_rate": 150000, "description": "Bilateral Knee Replacement"},
+      "hip_replacement": {"package_rate": 80000, "description": "Total Hip Replacement"},
+      "disc_prolapse": {"package_rate": 50000, "description": "Disc Prolapse Surgery"},
+      "spine_fusion_single": {"package_rate": 80000, "description": "Spinal Fusion (Single Level)"},
+      "arthroscopy": {"package_rate": 25000, "description": "Knee Arthroscopy"},
+      "acl_pcl_repair": {"package_rate": 50000, "description": "ACL/PCL Repair"}
+    },
+    "cardiology": {
+      "angioplasty_single": {"package_rate": 55000, "description": "PTCA with Single Stent"},
+      "angioplasty_double": {"package_rate": 75000, "description": "PTCA with Double Stent"},
+      "cabg_single": {"package_rate": 120000, "description": "CABG (Single Vessel)"},
+      "cabg_double": {"package_rate": 140000, "description": "CABG (Double Vessel)"},
+      "cabg_triple": {"package_rate": 170000, "description": "CABG (Triple Vessel)"},
+      "valve_replacement": {"package_rate": 120000, "description": "Heart Valve Replacement"},
+      "pacemaker_single": {"package_rate": 45000, "description": "Single Chamber Pacemaker"},
+      "pacemaker_dual": {"package_rate": 60000, "description": "Dual Chamber Pacemaker"},
+      "asd_closure": {"package_rate": 90000, "description": "ASD Closure"},
+      "vsd_closure": {"package_rate": 110000, "description": "VSD Closure"}
+    },
+    "ophthalmology": {
+      "cataract_phaco_iol": {"package_rate": 15000, "description": "Cataract with Phaco + IOL"},
+      "cataract_sics": {"package_rate": 10000, "description": "Cataract SICS with IOL"},
+      "glaucoma_surgery": {"package_rate": 20000, "description": "Glaucoma Surgery"},
+      "pterygium": {"package_rate": 8000, "description": "Pterygium Surgery"},
+      "squint_surgery": {"package_rate": 15000, "description": "Squint Correction"},
+      "retinal_detachment": {"package_rate": 30000, "description": "Retinal Detachment Surgery"},
+      "vitrectomy": {"package_rate": 40000, "description": "Vitrectomy"}
+    },
+    "ent": {
+      "tonsillectomy": {"package_rate": 12000, "description": "Tonsillectomy"},
+      "adenoidectomy": {"package_rate": 10000, "description": "Adenoidectomy"},
+      "septoplasty": {"package_rate": 15000, "description": "Septoplasty"},
+      "fess": {"package_rate": 25000, "description": "Functional Endoscopic Sinus Surgery"},
+      "mastoidectomy": {"package_rate": 25000, "description": "Mastoidectomy"},
+      "myringoplasty": {"package_rate": 15000, "description": "Myringoplasty"},
+      "cochlear_implant": {"package_rate": 600000, "description": "Cochlear Implant"}
+    },
+    "urology": {
+      "turp": {"package_rate": 30000, "description": "TURP (Prostate)"},
+      "kidney_stone_ursl": {"package_rate": 20000, "description": "Kidney Stone URSL"},
+      "kidney_stone_pcnl": {"package_rate": 40000, "description": "Kidney Stone PCNL"},
+      "kidney_stone_rirs": {"package_rate": 50000, "description": "Kidney Stone RIRS"},
+      "nephrectomy": {"package_rate": 50000, "description": "Nephrectomy"},
+      "circumcision": {"package_rate": 5000, "description": "Circumcision"},
+      "varicocele": {"package_rate": 15000, "description": "Varicocele Surgery"}
+    },
+    "obstetrics_gynecology": {
+      "normal_delivery": {"package_rate": 9000, "description": "Normal Delivery"},
+      "cesarean_section": {"package_rate": 12000, "description": "Cesarean Section"},
+      "hysterectomy_abdominal": {"package_rate": 25000, "description": "Abdominal Hysterectomy"},
+      "hysterectomy_vaginal": {"package_rate": 20000, "description": "Vaginal Hysterectomy"},
+      "hysterectomy_lap": {"package_rate": 35000, "description": "Laparoscopic Hysterectomy"},
+      "ovarian_cyst": {"package_rate": 15000, "description": "Ovarian Cyst Removal"},
+      "ectopic_pregnancy": {"package_rate": 15000, "description": "Ectopic Pregnancy Surgery"},
+      "tubectomy": {"package_rate": 5000, "description": "Tubectomy (Female Sterilization)"}
+    },
+    "pediatric": {
+      "cleft_lip": {"package_rate": 25000, "description": "Cleft Lip Repair"},
+      "cleft_palate": {"package_rate": 35000, "description": "Cleft Palate Repair"},
+      "hypospadias": {"package_rate": 20000, "description": "Hypospadias Repair"},
+      "undescended_testis": {"package_rate": 15000, "description": "Undescended Testis Surgery"},
+      "clubfoot": {"package_rate": 15000, "description": "Club Foot Correction"}
+    },
+    "neurosurgery": {
+      "craniotomy": {"package_rate": 75000, "description": "Craniotomy"},
+      "brain_tumor": {"package_rate": 100000, "description": "Brain Tumor Excision"},
+      "vp_shunt": {"package_rate": 35000, "description": "VP Shunt"},
+      "spine_tumor": {"package_rate": 80000, "description": "Spine Tumor Surgery"},
+      "head_injury": {"package_rate": 50000, "description": "Head Injury Management"}
+    },
+    "oncology": {
+      "mastectomy_simple": {"package_rate": 30000, "description": "Simple Mastectomy"},
+      "mastectomy_radical": {"package_rate": 50000, "description": "Radical Mastectomy"},
+      "thyroidectomy": {"package_rate": 30000, "description": "Thyroidectomy"},
+      "colectomy": {"package_rate": 50000, "description": "Colectomy"},
+      "chemotherapy_cycle": {"package_rate": 8000, "description": "Chemotherapy (per cycle, basic drugs)"}
+    },
+    "dialysis": {
+      "hemodialysis": {"package_rate": 1500, "description": "Hemodialysis (per session)"},
+      "peritoneal_dialysis": {"package_rate": 30000, "description": "Peritoneal Dialysis (monthly)"}
+    },
+    "transplants": {
+      "kidney_transplant": {"package_rate": 300000, "description": "Kidney Transplant"},
+      "corneal_transplant": {"package_rate": 30000, "description": "Corneal Transplant"}
+    }
+  }
+}
+

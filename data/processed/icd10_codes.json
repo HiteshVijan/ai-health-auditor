@@ -1,0 +1,38 @@
+{
+  "A00": {
+    "description": "Cholera",
+    "category": "Infectious Diseases"
+  },
+  "A01": {
+    "description": "Typhoid and paratyphoid fevers",
+    "category": "Infectious Diseases"
+  },
+  "E11": {
+    "description": "Type 2 diabetes mellitus",
+    "category": "Endocrine"
+  },
+  "I10": {
+    "description": "Essential (primary) hypertension",
+    "category": "Circulatory"
+  },
+  "J06": {
+    "description": "Acute upper respiratory infections",
+    "category": "Respiratory"
+  },
+  "K21": {
+    "description": "Gastro-esophageal reflux disease",
+    "category": "Digestive"
+  },
+  "M54": {
+    "description": "Dorsalgia (back pain)",
+    "category": "Musculoskeletal"
+  },
+  "R10": {
+    "description": "Abdominal and pelvic pain",
+    "category": "Symptoms"
+  },
+  "Z00": {
+    "description": "General examination",
+    "category": "Factors influencing health"
+  }
+}

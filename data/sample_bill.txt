@@ -1,0 +1,12 @@
+
+MEDICAL BILL - Apollo Hospital Mumbai
+Invoice: APOLLO/MUM/2024/5678
+Patient: Rajesh Kumar
+
+Laparoscopic Cholecystectomy    Rs 1,50,000
+MRI Abdomen                     Rs 15,000
+ICU (2 days)                    Rs 40,000
+Room (3 days)                   Rs 24,000
+Medicines                       Rs 21,000
+
+TOTAL: Rs 2,95,000 (incl 18% GST)

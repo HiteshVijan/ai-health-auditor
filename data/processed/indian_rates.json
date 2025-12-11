@@ -1,0 +1,63 @@
+{
+  "cghs": {
+    "consultation": {
+      "general_physician": 300.0,
+      "specialist": 500.0,
+      "super_specialist": 800.0
+    },
+    "procedures": {
+      "ecg": 200.0,
+      "xray_chest": 250.0,
+      "ultrasound_abdomen": 800.0,
+      "ct_scan_head": 3500.0,
+      "mri_brain": 8000.0,
+      "cbc": 150.0,
+      "lipid_profile": 400.0,
+      "thyroid_profile": 500.0
+    },
+    "surgeries": {
+      "appendectomy": 25000.0,
+      "cholecystectomy": 35000.0,
+      "hernia_repair": 25000.0,
+      "cataract_surgery": 20000.0,
+      "knee_replacement": 150000.0,
+      "hip_replacement": 175000.0,
+      "cabg": 200000.0,
+      "angioplasty": 100000.0
+    },
+    "room_charges": {
+      "general_ward": 1500.0,
+      "semi_private": 3000.0,
+      "private": 5000.0,
+      "icu": 8000.0
+    }
+  },
+  "pmjay": {
+    "packages": {
+      "cataract_surgery": 15000.0,
+      "appendectomy": 20000.0,
+      "hernia_repair": 17000.0,
+      "cesarean_section": 12000.0,
+      "normal_delivery": 9000.0,
+      "knee_replacement": 80000.0,
+      "hip_replacement": 80000.0,
+      "coronary_bypass": 120000.0,
+      "angioplasty_single": 50000.0,
+      "dialysis_per_session": 1500.0
+    }
+  },
+  "nabh_rates": {
+    "consultation": {
+      "general": 500.0,
+      "specialist": 1000.0
+    },
+    "room_charges_per_day": {
+      "general": 2500.0,
+      "semi_private": 5000.0,
+      "private": 10000.0,
+      "icu": 15000.0
+    }
+  },
+  "currency": "INR",
+  "last_updated": "2025-12-10T22:37:58.683190"
+}

@@ -1,0 +1,4 @@
+"""
+Extraction module tests.
+"""
+

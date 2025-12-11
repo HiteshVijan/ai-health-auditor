@@ -1,0 +1,4 @@
+"""
+Celery application package.
+"""
+

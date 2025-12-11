@@ -1,0 +1,180 @@
+{
+  "meta": {
+    "source": "CGHS (Central Government Health Scheme)",
+    "effective_date": "2024-01-01",
+    "currency": "INR",
+    "notes": "Rates applicable for CGHS empaneled hospitals. Private hospitals may charge higher."
+  },
+  "consultation": {
+    "general_physician": {
+      "rate": 300,
+      "max_private": 500,
+      "description": "General physician consultation"
+    },
+    "specialist": {
+      "rate": 500,
+      "max_private": 1000,
+      "description": "Specialist doctor consultation"
+    },
+    "super_specialist": {
+      "rate": 800,
+      "max_private": 1500,
+      "description": "Super specialist consultation (Cardiology, Neurology, etc.)"
+    },
+    "emergency": {
+      "rate": 500,
+      "max_private": 1500,
+      "description": "Emergency room consultation"
+    },
+    "telemedicine": {
+      "rate": 200,
+      "max_private": 400,
+      "description": "Online/video consultation"
+    }
+  },
+  "diagnostics": {
+    "laboratory": {
+      "cbc": {"rate": 150, "max_private": 400, "description": "Complete Blood Count"},
+      "lipid_profile": {"rate": 400, "max_private": 800, "description": "Lipid Profile"},
+      "liver_function": {"rate": 350, "max_private": 700, "description": "Liver Function Test (LFT)"},
+      "kidney_function": {"rate": 350, "max_private": 700, "description": "Kidney Function Test (KFT)"},
+      "thyroid_profile": {"rate": 500, "max_private": 1000, "description": "Thyroid Profile (T3, T4, TSH)"},
+      "hba1c": {"rate": 400, "max_private": 800, "description": "HbA1c (Diabetes monitoring)"},
+      "blood_sugar_fasting": {"rate": 80, "max_private": 200, "description": "Fasting Blood Sugar"},
+      "blood_sugar_pp": {"rate": 80, "max_private": 200, "description": "Post Prandial Blood Sugar"},
+      "urine_routine": {"rate": 100, "max_private": 300, "description": "Urine Routine Examination"},
+      "stool_routine": {"rate": 100, "max_private": 300, "description": "Stool Routine Examination"},
+      "blood_group": {"rate": 150, "max_private": 400, "description": "Blood Group and Rh typing"},
+      "esr": {"rate": 100, "max_private": 250, "description": "Erythrocyte Sedimentation Rate"},
+      "crp": {"rate": 300, "max_private": 600, "description": "C-Reactive Protein"},
+      "vitamin_d": {"rate": 800, "max_private": 1500, "description": "Vitamin D (25-OH)"},
+      "vitamin_b12": {"rate": 600, "max_private": 1200, "description": "Vitamin B12"},
+      "iron_studies": {"rate": 500, "max_private": 1000, "description": "Iron Studies (Serum Iron, TIBC, Ferritin)"},
+      "covid_rtpcr": {"rate": 500, "max_private": 1500, "description": "COVID-19 RT-PCR"},
+      "dengue_ns1": {"rate": 400, "max_private": 800, "description": "Dengue NS1 Antigen"},
+      "malaria_test": {"rate": 200, "max_private": 500, "description": "Malaria Parasite Test"}
+    },
+    "imaging": {
+      "xray_chest": {"rate": 250, "max_private": 600, "description": "Chest X-Ray (PA View)"},
+      "xray_limbs": {"rate": 300, "max_private": 700, "description": "X-Ray Limbs/Joints"},
+      "xray_spine": {"rate": 400, "max_private": 900, "description": "X-Ray Spine"},
+      "ultrasound_abdomen": {"rate": 800, "max_private": 1500, "description": "USG Whole Abdomen"},
+      "ultrasound_pelvis": {"rate": 600, "max_private": 1200, "description": "USG Pelvis"},
+      "ultrasound_obstetric": {"rate": 800, "max_private": 1500, "description": "USG Obstetric"},
+      "echo_2d": {"rate": 1500, "max_private": 3000, "description": "2D Echocardiography"},
+      "tmt": {"rate": 1200, "max_private": 2500, "description": "Treadmill Test (TMT)"},
+      "ct_head": {"rate": 3500, "max_private": 6000, "description": "CT Scan Head/Brain"},
+      "ct_chest": {"rate": 4000, "max_private": 7000, "description": "CT Scan Chest"},
+      "ct_abdomen": {"rate": 5000, "max_private": 8000, "description": "CT Scan Abdomen"},
+      "ct_whole_body": {"rate": 8000, "max_private": 15000, "description": "CT Scan Whole Body"},
+      "mri_brain": {"rate": 8000, "max_private": 15000, "description": "MRI Brain"},
+      "mri_spine": {"rate": 8000, "max_private": 15000, "description": "MRI Spine (per region)"},
+      "mri_knee": {"rate": 6000, "max_private": 12000, "description": "MRI Knee/Joint"},
+      "mri_whole_body": {"rate": 15000, "max_private": 30000, "description": "MRI Whole Body"},
+      "pet_ct": {"rate": 20000, "max_private": 40000, "description": "PET-CT Scan"},
+      "mammography": {"rate": 1500, "max_private": 3000, "description": "Mammography (both breasts)"},
+      "dexa_scan": {"rate": 1500, "max_private": 3000, "description": "DEXA Bone Density Scan"}
+    },
+    "cardiology": {
+      "ecg": {"rate": 200, "max_private": 500, "description": "Electrocardiogram (ECG/EKG)"},
+      "holter": {"rate": 2000, "max_private": 4000, "description": "24-hour Holter Monitoring"},
+      "angiography": {"rate": 15000, "max_private": 30000, "description": "Coronary Angiography"}
+    },
+    "endoscopy": {
+      "upper_gi": {"rate": 3000, "max_private": 6000, "description": "Upper GI Endoscopy"},
+      "colonoscopy": {"rate": 5000, "max_private": 10000, "description": "Colonoscopy"},
+      "bronchoscopy": {"rate": 5000, "max_private": 10000, "description": "Bronchoscopy"}
+    }
+  },
+  "room_charges_per_day": {
+    "general_ward": {"rate": 1500, "max_private": 3000, "description": "General Ward"},
+    "semi_private": {"rate": 3000, "max_private": 6000, "description": "Semi-Private Room"},
+    "private_room": {"rate": 5000, "max_private": 10000, "description": "Private Room"},
+    "deluxe_room": {"rate": 8000, "max_private": 15000, "description": "Deluxe Room"},
+    "suite": {"rate": 12000, "max_private": 25000, "description": "Suite"},
+    "icu": {"rate": 8000, "max_private": 20000, "description": "Intensive Care Unit (ICU)"},
+    "iccu": {"rate": 10000, "max_private": 25000, "description": "Cardiac Care Unit (ICCU)"},
+    "nicu": {"rate": 8000, "max_private": 20000, "description": "Neonatal ICU (NICU)"},
+    "hdu": {"rate": 6000, "max_private": 15000, "description": "High Dependency Unit (HDU)"}
+  },
+  "surgeries": {
+    "general_surgery": {
+      "appendectomy_open": {"rate": 20000, "max_private": 50000, "description": "Open Appendectomy"},
+      "appendectomy_lap": {"rate": 35000, "max_private": 80000, "description": "Laparoscopic Appendectomy"},
+      "hernia_open": {"rate": 20000, "max_private": 50000, "description": "Open Hernia Repair"},
+      "hernia_lap": {"rate": 40000, "max_private": 90000, "description": "Laparoscopic Hernia Repair"},
+      "cholecystectomy_open": {"rate": 25000, "max_private": 60000, "description": "Open Cholecystectomy"},
+      "cholecystectomy_lap": {"rate": 45000, "max_private": 100000, "description": "Laparoscopic Cholecystectomy"},
+      "hemorrhoidectomy": {"rate": 15000, "max_private": 40000, "description": "Hemorrhoidectomy"},
+      "fistula_surgery": {"rate": 20000, "max_private": 50000, "description": "Anal Fistula Surgery"}
+    },
+    "orthopedics": {
+      "knee_replacement_unilateral": {"rate": 150000, "max_private": 350000, "description": "Total Knee Replacement (one knee)"},
+      "knee_replacement_bilateral": {"rate": 280000, "max_private": 600000, "description": "Total Knee Replacement (both knees)"},
+      "hip_replacement": {"rate": 175000, "max_private": 400000, "description": "Total Hip Replacement"},
+      "spine_fusion": {"rate": 200000, "max_private": 500000, "description": "Spinal Fusion Surgery"},
+      "disc_surgery": {"rate": 100000, "max_private": 250000, "description": "Disc Surgery (Discectomy)"},
+      "fracture_fixation": {"rate": 30000, "max_private": 80000, "description": "Fracture Fixation (ORIF)"},
+      "arthroscopy_knee": {"rate": 40000, "max_private": 100000, "description": "Knee Arthroscopy"},
+      "acl_reconstruction": {"rate": 80000, "max_private": 200000, "description": "ACL Reconstruction"}
+    },
+    "cardiology": {
+      "angioplasty_single": {"rate": 100000, "max_private": 250000, "description": "Coronary Angioplasty (single stent)"},
+      "angioplasty_double": {"rate": 150000, "max_private": 350000, "description": "Coronary Angioplasty (two stents)"},
+      "cabg": {"rate": 200000, "max_private": 500000, "description": "Coronary Artery Bypass (CABG)"},
+      "valve_replacement": {"rate": 250000, "max_private": 600000, "description": "Heart Valve Replacement"},
+      "pacemaker": {"rate": 80000, "max_private": 200000, "description": "Pacemaker Implantation"},
+      "icd_implant": {"rate": 300000, "max_private": 700000, "description": "ICD Implantation"}
+    },
+    "ophthalmology": {
+      "cataract_phaco": {"rate": 20000, "max_private": 50000, "description": "Cataract Surgery (Phaco) with IOL"},
+      "cataract_premium_iol": {"rate": 40000, "max_private": 100000, "description": "Cataract with Premium IOL"},
+      "lasik": {"rate": 25000, "max_private": 60000, "description": "LASIK Surgery (both eyes)"},
+      "glaucoma_surgery": {"rate": 30000, "max_private": 70000, "description": "Glaucoma Surgery"},
+      "retinal_surgery": {"rate": 50000, "max_private": 120000, "description": "Retinal Detachment Surgery"}
+    },
+    "urology": {
+      "turp": {"rate": 40000, "max_private": 90000, "description": "TURP (Prostate Surgery)"},
+      "kidney_stone_ursl": {"rate": 30000, "max_private": 70000, "description": "Kidney Stone (URSL)"},
+      "kidney_stone_pcnl": {"rate": 60000, "max_private": 150000, "description": "Kidney Stone (PCNL)"},
+      "nephrectomy": {"rate": 80000, "max_private": 200000, "description": "Nephrectomy (Kidney Removal)"}
+    },
+    "obstetrics_gynecology": {
+      "normal_delivery": {"rate": 12000, "max_private": 35000, "description": "Normal Vaginal Delivery"},
+      "cesarean_section": {"rate": 25000, "max_private": 70000, "description": "Cesarean Section (C-Section)"},
+      "hysterectomy_open": {"rate": 35000, "max_private": 80000, "description": "Open Hysterectomy"},
+      "hysterectomy_lap": {"rate": 60000, "max_private": 150000, "description": "Laparoscopic Hysterectomy"},
+      "ivf_cycle": {"rate": 100000, "max_private": 250000, "description": "IVF Treatment (one cycle)"},
+      "ovarian_cyst_lap": {"rate": 40000, "max_private": 100000, "description": "Laparoscopic Ovarian Cystectomy"}
+    },
+    "neurology": {
+      "brain_tumor": {"rate": 200000, "max_private": 500000, "description": "Brain Tumor Surgery"},
+      "craniotomy": {"rate": 150000, "max_private": 400000, "description": "Craniotomy"},
+      "vp_shunt": {"rate": 80000, "max_private": 200000, "description": "VP Shunt Surgery"}
+    },
+    "ent": {
+      "tonsillectomy": {"rate": 15000, "max_private": 40000, "description": "Tonsillectomy"},
+      "septoplasty": {"rate": 25000, "max_private": 60000, "description": "Septoplasty (Deviated Septum)"},
+      "fess": {"rate": 35000, "max_private": 80000, "description": "FESS (Sinus Surgery)"},
+      "cochlear_implant": {"rate": 600000, "max_private": 1200000, "description": "Cochlear Implant"}
+    },
+    "oncology": {
+      "mastectomy": {"rate": 50000, "max_private": 120000, "description": "Mastectomy (Breast Cancer)"},
+      "chemotherapy_per_cycle": {"rate": 10000, "max_private": 50000, "description": "Chemotherapy (per cycle, varies by drug)"},
+      "radiation_per_session": {"rate": 5000, "max_private": 15000, "description": "Radiation Therapy (per session)"}
+    }
+  },
+  "emergency_services": {
+    "ambulance_basic": {"rate": 500, "max_private": 2000, "description": "Basic Ambulance (within city)"},
+    "ambulance_als": {"rate": 2000, "max_private": 5000, "description": "Advanced Life Support Ambulance"},
+    "emergency_registration": {"rate": 200, "max_private": 500, "description": "Emergency Registration Fee"}
+  },
+  "miscellaneous": {
+    "dialysis_per_session": {"rate": 1500, "max_private": 4000, "description": "Hemodialysis (per session)"},
+    "physiotherapy_session": {"rate": 300, "max_private": 800, "description": "Physiotherapy (per session)"},
+    "dressing": {"rate": 200, "max_private": 500, "description": "Wound Dressing"},
+    "injection_iv": {"rate": 100, "max_private": 300, "description": "IV Injection/Medication"},
+    "nebulization": {"rate": 100, "max_private": 300, "description": "Nebulization"}
+  }
+}
+

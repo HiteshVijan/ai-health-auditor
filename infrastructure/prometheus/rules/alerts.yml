@@ -1,0 +1,116 @@
+# Prometheus Alerting Rules
+# AI Health Bill Auditor
+
+groups:
+  - name: application
+    rules:
+      # High error rate
+      - alert: HighErrorRate
+        expr: |
+          sum(rate(http_requests_total{status_code=~"5.."}[5m])) 
+          / sum(rate(http_requests_total[5m])) > 0.05
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: High HTTP error rate
+          description: "Error rate is {{ $value | humanizePercentage }} over the last 5 minutes"
+
+      # Slow response times
+      - alert: SlowResponseTime
+        expr: |
+          histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket[5m])) by (le)) > 2
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: Slow API response times
+          description: "95th percentile response time is {{ $value }}s"
+
+      # Document parsing taking too long
+      - alert: SlowDocumentParsing
+        expr: |
+          histogram_quantile(0.95, sum(rate(parse_duration_seconds_bucket[5m])) by (le)) > 60
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: Document parsing is slow
+          description: "95th percentile parse time is {{ $value }}s"
+
+      # High number of low confidence fields
+      - alert: HighLowConfidenceRate
+        expr: |
+          sum(rate(low_confidence_fields_total[1h])) 
+          / sum(rate(fields_extracted_total[1h])) > 0.3
+        for: 30m
+        labels:
+          severity: warning
+        annotations:
+          summary: High rate of low confidence extractions
+          description: "{{ $value | humanizePercentage }} of fields have low confidence"
+
+      # Celery queue backup
+      - alert: CeleryQueueBackup
+        expr: celery_queue_length > 100
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: Celery queue is backing up
+          description: "Queue {{ $labels.queue_name }} has {{ $value }} pending tasks"
+
+      # No active Celery workers
+      - alert: NoCeleryWorkers
+        expr: celery_active_workers == 0
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: No active Celery workers
+          description: "All Celery workers are down"
+
+  - name: infrastructure
+    rules:
+      # Database connection pool exhausted
+      - alert: DatabaseConnectionsHigh
+        expr: db_connections_active > 80
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: High database connection usage
+          description: "{{ $value }} active database connections"
+
+      # Redis memory high
+      - alert: RedisMemoryHigh
+        expr: redis_memory_used_bytes / redis_memory_max_bytes > 0.8
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: Redis memory usage is high
+          description: "Redis is using {{ $value | humanizePercentage }} of available memory"
+
+      # Disk space low
+      - alert: DiskSpaceLow
+        expr: |
+          (node_filesystem_avail_bytes{mountpoint="/"} 
+          / node_filesystem_size_bytes{mountpoint="/"}) < 0.1
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: Low disk space
+          description: "Only {{ $value | humanizePercentage }} disk space remaining"
+
+      # Container restarts
+      - alert: ContainerRestarting
+        expr: increase(container_restart_count[1h]) > 3
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: Container restarting frequently
+          description: "Container {{ $labels.name }} has restarted {{ $value }} times in the last hour"
+
