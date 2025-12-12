@@ -43,6 +43,17 @@ function Sidebar() {
       gradient: 'from-violet-500 to-purple-500',
     },
     { 
+      path: '/pricing', 
+      labelKey: 'nav.pricing', 
+      icon: (
+        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
+                d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      ),
+      gradient: 'from-teal-500 to-cyan-500',
+    },
+    { 
       path: '/history', 
       labelKey: 'nav.history', 
       icon: (
@@ -98,8 +109,15 @@ function Sidebar() {
                   {t(item.labelKey)}
                 </span>
                 
+                {/* Badge */}
+                {'badge' in item && item.badge && (
+                  <span className="ml-auto px-2 py-0.5 text-[10px] font-bold bg-white/20 text-white rounded-full">
+                    {item.badge}
+                  </span>
+                )}
+                
                 {/* Active indicator */}
-                {isActive && (
+                {isActive && !('badge' in item) && (
                   <div className="ml-auto w-2 h-2 rounded-full bg-white/50" />
                 )}
               </NavLink>

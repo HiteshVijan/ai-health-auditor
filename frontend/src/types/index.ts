@@ -25,7 +25,9 @@ export interface RegisterRequest {
 
 export interface AuthResponse {
   accessToken: string;
+  access_token?: string;  // Backend may return snake_case
   tokenType: string;
+  token_type?: string;
 }
 
 // Document types

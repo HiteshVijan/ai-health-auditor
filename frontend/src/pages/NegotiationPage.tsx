@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Card, Button, Badge, Loader } from '../components/common';
 import apiClient from '../services/api';
 
@@ -204,7 +204,6 @@ function DeliveryStatusIndicator({ status, result }: { status: DeliveryStatus; r
  */
 function NegotiationPage() {
   const { documentId: paramDocId } = useParams<{ documentId?: string }>();
-  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
   // State
@@ -219,6 +218,8 @@ function NegotiationPage() {
   const [negotiationResult, setNegotiationResult] = useState<NegotiationResult | null>(null);
   const [isLoadingDocuments, setIsLoadingDocuments] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [confirmDeleteId, setConfirmDeleteId] = useState<number | null>(null);
+  const [deletingId, setDeletingId] = useState<number | null>(null);
 
   // Contact info state
   const [recipientEmail, setRecipientEmail] = useState('');
@@ -344,6 +345,34 @@ function NegotiationPage() {
   }, []);
 
   /**
+   * Delete a document.
+   */
+  const handleDeleteDocument = useCallback(async (docId: number, e: React.MouseEvent) => {
+    e.stopPropagation();
+    
+    if (confirmDeleteId !== docId) {
+      setConfirmDeleteId(docId);
+      return;
+    }
+
+    setDeletingId(docId);
+    try {
+      await apiClient.delete(`/documents/${docId}`);
+      setDocuments(prev => prev.filter(d => d.id !== docId));
+      if (selectedDocumentId === docId) {
+        setSelectedDocumentId(null);
+        setGeneratedLetter(null);
+      }
+      setConfirmDeleteId(null);
+    } catch (err: any) {
+      console.error('Failed to delete:', err);
+      setError(err.response?.data?.detail || 'Failed to delete document');
+    } finally {
+      setDeletingId(null);
+    }
+  }, [confirmDeleteId, selectedDocumentId]);
+
+  /**
    * Get selected document.
    */
   const selectedDocument = documents.find((d) => d.id === selectedDocumentId);
@@ -412,35 +441,72 @@ function NegotiationPage() {
             ) : (
               <div className="space-y-2" data-testid="document-list">
                 {documents.map((doc) => (
-                  <button
+                  <div
                     key={doc.id}
-                    type="button"
-                    onClick={() => setSelectedDocumentId(doc.id)}
-                    disabled={deliveryStatus === 'sending'}
                     className={`
-                      w-full p-3 rounded-lg border-2 text-left transition-all
+                      group relative p-3 rounded-lg border-2 transition-all
                       ${selectedDocumentId === doc.id
                         ? 'border-primary-500 bg-primary-50'
                         : 'border-gray-200 hover:border-gray-300'
                       }
-                      ${deliveryStatus === 'sending' ? 'opacity-50 cursor-not-allowed' : ''}
+                      ${deliveryStatus === 'sending' ? 'opacity-50' : ''}
                     `}
                     data-testid={`document-option-${doc.id}`}
                   >
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="font-medium text-gray-900">{doc.fileName}</p>
-                        <p className="text-sm text-gray-500">
-                          Uploaded {new Date(doc.uploadDate).toLocaleDateString()}
-                        </p>
+                    <button
+                      type="button"
+                      onClick={() => setSelectedDocumentId(doc.id)}
+                      disabled={deliveryStatus === 'sending'}
+                      className="w-full text-left"
+                    >
+                      <div className="flex items-center justify-between pr-8">
+                        <div>
+                          <p className="font-medium text-gray-900">{doc.fileName}</p>
+                          <p className="text-sm text-gray-500">
+                            Uploaded {new Date(doc.uploadDate).toLocaleDateString()}
+                          </p>
+                        </div>
+                        {doc.potentialSavings && doc.potentialSavings > 0 && (
+                          <Badge variant="success" size="sm">
+                            Save ${doc.potentialSavings.toFixed(2)}
+                          </Badge>
+                        )}
                       </div>
-                      {doc.potentialSavings && doc.potentialSavings > 0 && (
-                        <Badge variant="success" size="sm">
-                          Save ${doc.potentialSavings.toFixed(2)}
-                        </Badge>
+                    </button>
+                    
+                    {/* Delete Button */}
+                    <div className="absolute right-2 top-1/2 -translate-y-1/2">
+                      {confirmDeleteId === doc.id ? (
+                        <div className="flex items-center gap-1">
+                          <button
+                            onClick={(e) => handleDeleteDocument(doc.id, e)}
+                            disabled={deletingId === doc.id}
+                            className="text-xs px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600 disabled:opacity-50"
+                          >
+                            {deletingId === doc.id ? '...' : 'Yes'}
+                          </button>
+                          <button
+                            onClick={(e) => { e.stopPropagation(); setConfirmDeleteId(null); }}
+                            className="text-xs px-2 py-1 bg-gray-200 text-gray-700 rounded hover:bg-gray-300"
+                          >
+                            No
+                          </button>
+                        </div>
+                      ) : (
+                        <button
+                          onClick={(e) => handleDeleteDocument(doc.id, e)}
+                          className="p-1.5 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 
+                                     opacity-0 group-hover:opacity-100 transition-all"
+                          title="Delete document"
+                        >
+                          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
+                                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                          </svg>
+                        </button>
                       )}
                     </div>
-                  </button>
+                  </div>
                 ))}
               </div>
             )}
@@ -613,7 +679,6 @@ function NegotiationPage() {
                   </Button>
                   <Button
                     onClick={handleSendNegotiation}
-                    isLoading={deliveryStatus === 'sending'}
                     className="flex-1"
                     data-testid="send-button"
                   >

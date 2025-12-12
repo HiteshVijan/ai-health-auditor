@@ -397,6 +397,66 @@ Be empathetic but professional. Keep response under 200 words."""
         return await self._call_llm(prompt, "assistant")
 
     # =========================================================
+    # 🌐 Translation
+    # =========================================================
+    
+    async def generate_text(
+        self,
+        prompt: str,
+        max_tokens: int = 500,
+        system_prompt: str = "You are a helpful translator. Return only the requested output, nothing else."
+    ) -> str:
+        """
+        Generate text using the AI model.
+        
+        Generic text generation for translations, summaries, etc.
+        """
+        if self.provider == AIProvider.GROQ:
+            return await self._call_groq_simple(prompt, system_prompt, max_tokens)
+        elif self.provider == AIProvider.OLLAMA:
+            return await self._call_ollama(prompt, system_prompt)
+        else:
+            return prompt  # Mock mode returns input
+    
+    async def _call_groq_simple(
+        self,
+        prompt: str,
+        system_prompt: str,
+        max_tokens: int = 500
+    ) -> str:
+        """Call Groq API with custom system prompt and max tokens."""
+        try:
+            async with httpx.AsyncClient() as client:
+                response = await client.post(
+                    self.groq_url,
+                    headers={
+                        "Authorization": f"Bearer {self.groq_api_key}",
+                        "Content-Type": "application/json",
+                    },
+                    json={
+                        "model": self.groq_model,
+                        "messages": [
+                            {"role": "system", "content": system_prompt},
+                            {"role": "user", "content": prompt}
+                        ],
+                        "temperature": 0.3,  # Lower for translations
+                        "max_tokens": max_tokens,
+                    },
+                    timeout=30.0,
+                )
+                
+                if response.status_code == 200:
+                    data = response.json()
+                    return data["choices"][0]["message"]["content"]
+                else:
+                    logger.error(f"Groq error: {response.status_code}")
+                    
+        except Exception as e:
+            logger.error(f"Groq call failed: {e}")
+        
+        return ""
+
+    # =========================================================
     # 🔧 Internal Methods
     # =========================================================
     

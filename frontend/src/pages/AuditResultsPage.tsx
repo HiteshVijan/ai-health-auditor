@@ -1,4 +1,4 @@
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { Card, Button, Badge } from '../components/common';
 import apiClient from '../services/api';
@@ -196,10 +196,13 @@ function NegotiationScript({ script, index }: { script: string; index: number })
 
 function AuditResultsPage() {
   const { documentId } = useParams<{ documentId: string }>();
+  const navigate = useNavigate();
   const [audit, setAudit] = useState<AuditData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'issues' | 'breakdown' | 'insider' | 'strategy'>('issues');
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -227,6 +230,24 @@ function AuditResultsPage() {
   const formatCurrency = (amount: number, currency: string = '₹') => {
     if (currency === '₹') return `₹${amount.toLocaleString('en-IN')}`;
     return `$${amount.toFixed(2)}`;
+  };
+
+  const handleDelete = async () => {
+    if (!showDeleteConfirm) {
+      setShowDeleteConfirm(true);
+      return;
+    }
+
+    setIsDeleting(true);
+    try {
+      await apiClient.delete(`/documents/${documentId}`);
+      navigate('/history', { replace: true });
+    } catch (err: any) {
+      console.error('Failed to delete:', err);
+      alert(err.response?.data?.detail || 'Failed to delete document');
+      setIsDeleting(false);
+      setShowDeleteConfirm(false);
+    }
   };
 
   if (loading) {
@@ -273,11 +294,38 @@ function AuditResultsPage() {
             )}
           </div>
         </div>
-        <Link to={`/negotiate/${documentId}`}>
-          <Button className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700">
-            ✉️ Generate Negotiation Letter
-          </Button>
-        </Link>
+        <div className="flex items-center gap-3">
+          {showDeleteConfirm ? (
+            <div className="flex items-center gap-2 bg-red-50 px-3 py-2 rounded-lg border border-red-200">
+              <span className="text-red-700 text-sm font-medium">Delete this audit?</span>
+              <Button 
+                onClick={handleDelete}
+                disabled={isDeleting}
+                className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 text-sm"
+              >
+                {isDeleting ? 'Deleting...' : 'Yes, Delete'}
+              </Button>
+              <Button 
+                onClick={() => setShowDeleteConfirm(false)}
+                className="bg-gray-200 hover:bg-gray-300 text-gray-700 px-3 py-1 text-sm"
+              >
+                Cancel
+              </Button>
+            </div>
+          ) : (
+            <Button 
+              onClick={handleDelete}
+              className="bg-red-100 hover:bg-red-200 text-red-600 border border-red-200"
+            >
+              🗑️ Delete
+            </Button>
+          )}
+          <Link to={`/negotiate/${documentId}`}>
+            <Button className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700">
+              ✉️ Generate Negotiation Letter
+            </Button>
+          </Link>
+        </div>
       </div>
 
       {/* Score Overview Cards */}

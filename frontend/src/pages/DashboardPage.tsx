@@ -100,7 +100,16 @@ function StatCard({
 // RECENT AUDIT ROW
 // =============================================================================
 
-function RecentAuditRow({ audit }: { audit: RecentAudit }) {
+function RecentAuditRow({ 
+  audit, 
+  onDelete 
+}: { 
+  audit: RecentAudit;
+  onDelete: (documentId: number) => void;
+}) {
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
+
   const formatCurrency = (amount: number, currency: string) => {
     if (currency === '₹') return `₹${amount.toLocaleString('en-IN')}`;
     return `$${amount.toLocaleString()}`;
@@ -118,45 +127,100 @@ function RecentAuditRow({ audit }: { audit: RecentAudit }) {
     return date.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' });
   };
 
+  const handleDelete = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    if (!showConfirm) {
+      setShowConfirm(true);
+      return;
+    }
+
+    setIsDeleting(true);
+    try {
+      await onDelete(audit.document_id);
+      setShowConfirm(false);
+    } catch (error) {
+      console.error('Delete failed:', error);
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
   return (
-    <Link 
-      to={`/audit/${audit.document_id}`}
-      className="group flex items-center gap-4 p-4 rounded-xl hover:bg-gray-50 transition-all duration-200"
-    >
-      {/* Region Flag */}
-      <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-gray-50 to-gray-100 
-                      flex items-center justify-center text-lg border border-gray-100
-                      group-hover:scale-105 transition-transform">
-        {audit.region === 'IN' ? '🇮🇳' : '🇺🇸'}
-      </div>
+    <div className="group flex items-center gap-4 p-4 rounded-xl hover:bg-gray-50 transition-all duration-200 relative">
+      <Link 
+        to={`/audit/${audit.document_id}`}
+        className="flex items-center gap-4 flex-1 min-w-0"
+      >
+        {/* Region Flag */}
+        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-gray-50 to-gray-100 
+                        flex items-center justify-center text-lg border border-gray-100
+                        group-hover:scale-105 transition-transform">
+          {audit.region === 'IN' ? '🇮🇳' : '🇺🇸'}
+        </div>
 
-      {/* File Info */}
-      <div className="flex-1 min-w-0">
-        <p className="font-medium text-gray-900 truncate group-hover:text-emerald-600 transition-colors">
-          {audit.filename}
-        </p>
-        <p className="text-sm text-gray-400">{formatDate(audit.uploaded_at)}</p>
-      </div>
+        {/* File Info */}
+        <div className="flex-1 min-w-0">
+          <p className="font-medium text-gray-900 truncate group-hover:text-emerald-600 transition-colors">
+            {audit.filename}
+          </p>
+          <p className="text-sm text-gray-400">{formatDate(audit.uploaded_at)}</p>
+        </div>
 
-      {/* Savings */}
-      <div className="text-right">
-        <p className="font-semibold text-emerald-600">
-          {formatCurrency(audit.potential_savings, audit.currency)}
-        </p>
-        <p className="text-xs text-gray-400">savings</p>
-      </div>
+        {/* Savings */}
+        <div className="text-right">
+          <p className="font-semibold text-emerald-600">
+            {formatCurrency(audit.potential_savings, audit.currency)}
+          </p>
+          <p className="text-xs text-gray-400">savings</p>
+        </div>
 
-      {/* Score Badge */}
-      <div className={`px-3 py-1.5 rounded-lg text-sm font-semibold ${getScoreColor(audit.score)}`}>
-        {audit.score || '--'}/100
-      </div>
+        {/* Score Badge */}
+        <div className={`px-3 py-1.5 rounded-lg text-sm font-semibold ${getScoreColor(audit.score)}`}>
+          {audit.score || '--'}/100
+        </div>
 
-      {/* Arrow */}
-      <svg className="w-5 h-5 text-gray-300 group-hover:text-emerald-500 group-hover:translate-x-1 transition-all" 
-           fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-      </svg>
-    </Link>
+        {/* Arrow */}
+        <svg className="w-5 h-5 text-gray-300 group-hover:text-emerald-500 group-hover:translate-x-1 transition-all" 
+             fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+        </svg>
+      </Link>
+
+      {/* Delete Button */}
+      <button
+        onClick={handleDelete}
+        disabled={isDeleting}
+        className={`ml-2 p-2 rounded-lg transition-all duration-200 ${
+          showConfirm
+            ? 'bg-rose-100 text-rose-600 hover:bg-rose-200'
+            : 'bg-transparent text-gray-400 hover:bg-rose-50 hover:text-rose-600 opacity-0 group-hover:opacity-100'
+        } ${isDeleting ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
+        title={showConfirm ? 'Click again to confirm delete' : 'Delete audit'}
+      >
+        {isDeleting ? (
+          <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+        ) : (
+          <svg 
+            className="w-4 h-4" 
+            fill="none" 
+            viewBox="0 0 24 24" 
+            stroke="currentColor"
+          >
+            <path 
+              strokeLinecap="round" 
+              strokeLinejoin="round" 
+              strokeWidth={2} 
+              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" 
+            />
+          </svg>
+        )}
+      </button>
+    </div>
   );
 }
 
@@ -185,6 +249,17 @@ function DashboardPage() {
       console.error('Dashboard fetch error:', err);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleDeleteDocument = async (documentId: number) => {
+    try {
+      await apiClient.delete(`/documents/${documentId}`);
+      // Refresh stats after deletion
+      await fetchStats();
+    } catch (err) {
+      console.error('Delete failed:', err);
+      throw err;
     }
   };
 
@@ -363,7 +438,11 @@ function DashboardPage() {
         {stats?.recent_audits && stats.recent_audits.length > 0 ? (
           <div className="divide-y divide-gray-100 -mx-4">
             {stats.recent_audits.map((audit) => (
-              <RecentAuditRow key={audit.document_id} audit={audit} />
+              <RecentAuditRow 
+                key={audit.document_id} 
+                audit={audit} 
+                onDelete={handleDeleteDocument}
+              />
             ))}
           </div>
         ) : (

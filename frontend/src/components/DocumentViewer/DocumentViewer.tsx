@@ -270,15 +270,6 @@ function DocumentViewer({
   };
 
   /**
-   * Get confidence badge variant.
-   */
-  const getConfidenceBadge = (confidence: number) => {
-    if (confidence >= 0.9) return 'success';
-    if (confidence >= 0.75) return 'warning';
-    return 'error';
-  };
-
-  /**
    * Format field name for display.
    */
   const formatFieldName = (name: string) => {

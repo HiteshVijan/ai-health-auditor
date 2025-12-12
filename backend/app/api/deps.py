@@ -5,9 +5,9 @@ Provides common dependencies like database sessions and authentication.
 Simplified for local SQLite development.
 """
 
-from typing import Generator, Annotated
+from typing import Generator, Annotated, Optional
 
-from fastapi import Depends, HTTPException, status
+from fastapi import Depends, HTTPException, status, Header
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 from sqlalchemy import text
@@ -18,6 +18,7 @@ from app.core.exceptions import CredentialsException
 
 # OAuth2 scheme for token extraction
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/login")
+oauth2_scheme_optional = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/login", auto_error=False)
 
 
 def get_current_user_id(
@@ -129,4 +130,36 @@ def get_current_superuser(
             detail="Not enough privileges",
         )
     return current_user
+
+
+def get_optional_user_id(
+    db: Annotated[Session, Depends(get_db)],
+    token: Annotated[Optional[str], Depends(oauth2_scheme_optional)] = None,
+) -> Optional[int]:
+    """
+    Get the current user ID if authenticated, None otherwise.
+    
+    Used for endpoints that work both with and without authentication,
+    providing enhanced features for authenticated users.
+    """
+    if not token:
+        return None
+    
+    try:
+        user_id = verify_token(token)
+        if user_id is None:
+            return None
+        
+        # Verify user exists and is active
+        result = db.execute(
+            text("SELECT id, is_active FROM users WHERE id = :user_id"),
+            {"user_id": int(user_id)}
+        ).fetchone()
+        
+        if result is None or not result[1]:
+            return None
+        
+        return int(user_id)
+    except Exception:
+        return None
 

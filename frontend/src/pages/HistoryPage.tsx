@@ -27,24 +27,49 @@ function HistoryPage() {
   const [documents, setDocuments] = useState<Document[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [deletingId, setDeletingId] = useState<number | null>(null);
+  const [confirmDeleteId, setConfirmDeleteId] = useState<number | null>(null);
+
+  const fetchDocuments = async () => {
+    try {
+      setLoading(true);
+      const response = await apiClient.get<DocumentsResponse>('/documents/');
+      setDocuments(response.data.documents);
+      setError(null);
+    } catch (err: any) {
+      console.error('Failed to fetch documents:', err);
+      setError(err.response?.data?.detail || 'Failed to load documents');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchDocuments = async () => {
-      try {
-        setLoading(true);
-        const response = await apiClient.get<DocumentsResponse>('/documents/');
-        setDocuments(response.data.documents);
-        setError(null);
-      } catch (err: any) {
-        console.error('Failed to fetch documents:', err);
-        setError(err.response?.data?.detail || 'Failed to load documents');
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchDocuments();
   }, []);
+
+  const handleDelete = async (docId: number) => {
+    if (confirmDeleteId !== docId) {
+      setConfirmDeleteId(docId);
+      return;
+    }
+
+    setDeletingId(docId);
+    try {
+      await apiClient.delete(`/documents/${docId}`);
+      setDocuments(documents.filter(d => d.id !== docId));
+      setConfirmDeleteId(null);
+    } catch (err: any) {
+      console.error('Failed to delete document:', err);
+      alert(err.response?.data?.detail || 'Failed to delete document');
+    } finally {
+      setDeletingId(null);
+    }
+  };
+
+  const cancelDelete = () => {
+    setConfirmDeleteId(null);
+  };
 
   const formatDate = (dateStr: string | null) => {
     if (!dateStr) return '-';
@@ -159,20 +184,47 @@ function HistoryPage() {
                     <td className="py-4 px-4">
                       {getStatusBadge(doc.status)}
                     </td>
-                    <td className="py-4 px-4 text-right space-x-2">
-                      <Link
-                        to={`/audit/${doc.id}`}
-                        className="text-blue-600 hover:underline font-medium"
-                      >
-                        View Audit
-                      </Link>
-                      <span className="text-gray-300">|</span>
-                      <Link
-                        to={`/negotiate/${doc.id}`}
-                        className="text-green-600 hover:underline font-medium"
-                      >
-                        Negotiate
-                      </Link>
+                    <td className="py-4 px-4 text-right">
+                      <div className="flex items-center justify-end gap-2">
+                        <Link
+                          to={`/audit/${doc.id}`}
+                          className="text-blue-600 hover:underline font-medium"
+                        >
+                          View Audit
+                        </Link>
+                        <span className="text-gray-300">|</span>
+                        <Link
+                          to={`/negotiate/${doc.id}`}
+                          className="text-green-600 hover:underline font-medium"
+                        >
+                          Negotiate
+                        </Link>
+                        <span className="text-gray-300">|</span>
+                        {confirmDeleteId === doc.id ? (
+                          <div className="flex items-center gap-1">
+                            <button
+                              onClick={() => handleDelete(doc.id)}
+                              disabled={deletingId === doc.id}
+                              className="text-white bg-red-500 hover:bg-red-600 px-2 py-1 rounded text-sm font-medium disabled:opacity-50"
+                            >
+                              {deletingId === doc.id ? 'Deleting...' : 'Confirm'}
+                            </button>
+                            <button
+                              onClick={cancelDelete}
+                              className="text-gray-600 hover:text-gray-800 px-2 py-1 rounded text-sm"
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                        ) : (
+                          <button
+                            onClick={() => handleDelete(doc.id)}
+                            className="text-red-600 hover:text-red-700 font-medium hover:underline"
+                          >
+                            Delete
+                          </button>
+                        )}
+                      </div>
                     </td>
                   </tr>
                 ))}

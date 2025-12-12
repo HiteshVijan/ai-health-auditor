@@ -14,11 +14,12 @@ from app.models.encrypted_fields import EncryptedString, EncryptedEmail, Encrypt
 
 
 class UserRole(str, enum.Enum):
-    """User role enumeration."""
+    """User role enumeration for B2C users."""
     
     USER = "user"
     REVIEWER = "reviewer"
     ADMIN = "admin"
+    # Note: Hospital admins use separate HospitalAdmin model (B2B)
 
 
 class User(Base, IDMixin, TimestampMixin):

@@ -56,6 +56,7 @@ async def get_ai_status():
 @router.get("/{document_id}", response_model=AuditResult)
 async def get_document_audit(
     document_id: int,
+    force_reanalyze: bool = False,
     db: Session = Depends(get_db),
     user_id: int = Depends(get_current_user_id),
 ):
@@ -66,7 +67,12 @@ async def get_document_audit(
     1. OCR extracts text from bill image
     2. AI analyzes the extracted text
     3. Returns actual findings (no hardcoded data)
+    
+    Results are cached - subsequent requests return cached results.
+    Use force_reanalyze=true to re-run the analysis.
     """
+    import json
+    
     # Get document
     result = db.execute(
         text("""SELECT id, filename, content_type, file_key 
@@ -79,6 +85,105 @@ async def get_document_audit(
     
     doc_id, filename, content_type, file_key = result
     filename = filename.lower() if filename else ""
+    
+    # ============================================
+    # CHECK CACHE - Return existing result if available
+    # ============================================
+    if not force_reanalyze:
+        cached = db.execute(
+            text("""SELECT * FROM audit_results WHERE document_id = :doc_id"""),
+            {"doc_id": document_id}
+        ).fetchone()
+        
+        if cached:
+            logger.info(f"📦 Returning cached audit result for document {document_id}")
+            
+            # Parse JSON fields
+            issues = []
+            if cached.issues_json:
+                try:
+                    issues_data = json.loads(cached.issues_json)
+                    issues = [AuditIssue(**i) for i in issues_data]
+                except:
+                    pass
+            
+            market_comp = None
+            if cached.market_comparison_json:
+                try:
+                    mc = json.loads(cached.market_comparison_json)
+                    market_comp = MarketComparison(
+                        hospital_type=mc.get("hospital_type"),
+                        price_tier=mc.get("price_tier"),
+                        competitor_prices=[CompetitorPrice(**cp) for cp in mc.get("competitor_prices", [])] if mc.get("competitor_prices") else None,
+                        cghs_rate=mc.get("cghs_rate"),
+                        market_average=mc.get("market_average"),
+                    )
+                except:
+                    pass
+            
+            neg_strategy = None
+            if cached.negotiation_strategy_json:
+                try:
+                    ns = json.loads(cached.negotiation_strategy_json)
+                    neg_strategy = NegotiationStrategy(**ns)
+                except:
+                    pass
+            
+            doc_breakdown = None
+            if cached.document_breakdown_json:
+                try:
+                    db_data = json.loads(cached.document_breakdown_json)
+                    doc_breakdown = DocumentBreakdown(
+                        scan_summary=ScanSummary(**db_data.get("scan_summary", {})) if db_data.get("scan_summary") else None,
+                        hospital_name=db_data.get("hospital_name"),
+                        hospital_type=db_data.get("hospital_type"),
+                        bill_number=db_data.get("bill_number"),
+                        bill_date=db_data.get("bill_date"),
+                        patient_name=db_data.get("patient_name"),
+                        line_items=[ExtractedLineItem(**li) for li in db_data.get("line_items", [])],
+                        categories=[CategoryBreakdown(**cb) for cb in db_data.get("categories", [])],
+                        key_metrics=KeyMetrics(**db_data.get("key_metrics", {})) if db_data.get("key_metrics") else None,
+                        raw_text_preview=db_data.get("raw_text_preview"),
+                    )
+                except:
+                    pass
+            
+            insider_analysis = None
+            if cached.insider_analysis_json:
+                try:
+                    ia = json.loads(cached.insider_analysis_json)
+                    insider_analysis = InsiderAnalysis(**ia)
+                except:
+                    pass
+            
+            insider_tips = None
+            if cached.insider_tips_json:
+                try:
+                    insider_tips = json.loads(cached.insider_tips_json)
+                except:
+                    pass
+            
+            return AuditResult(
+                document_id=document_id,
+                score=cached.score or 0,
+                total_issues=cached.total_issues or 0,
+                critical_count=sum(1 for i in issues if i.severity == "critical"),
+                high_count=sum(1 for i in issues if i.severity == "high"),
+                medium_count=sum(1 for i in issues if i.severity == "medium"),
+                low_count=sum(1 for i in issues if i.severity == "low"),
+                potential_savings=cached.potential_savings or 0,
+                currency=cached.currency or "₹",
+                region=cached.region or "IN",
+                issues=issues,
+                market_comparison=market_comp,
+                insider_tips=insider_tips,
+                negotiation_strategy=neg_strategy,
+                document_breakdown=doc_breakdown,
+                insider_analysis=insider_analysis,
+                summary=cached.summary,
+                ocr_used=cached.ocr_used or False,
+                ai_provider=cached.ai_provider or "cached",
+            )
     
     # Try OCR for images
     ocr_text = None
@@ -256,7 +361,27 @@ async def get_document_audit(
                 except Exception as e:
                     logger.warning(f"Document analysis failed: {e}")
             
-            return AuditResult(
+            # Contribute pricing data to the crowdsourced database (Data Moat)
+            try:
+                from app.services.pricing_service import pricing_service
+                if parsed and parsed.get("line_items"):
+                    extracted_data = {
+                        "hospital": parsed.get("hospital", {}),
+                        "line_items": parsed.get("line_items", []),
+                    }
+                    price_points_added = pricing_service.process_bill_for_pricing(
+                        db=db,
+                        document_id=document_id,
+                        user_id=user_id,
+                        extracted_data=extracted_data
+                    )
+                    if price_points_added > 0:
+                        logger.info(f"📊 Added {price_points_added} price points to pricing database")
+            except Exception as e:
+                logger.warning(f"Failed to contribute pricing data: {e}")
+            
+            # Build the result
+            audit_result = AuditResult(
                 document_id=document_id,
                 score=analysis.get("score", 50),
                 total_issues=len(issues),
@@ -278,6 +403,67 @@ async def get_document_audit(
                 ai_provider=ai_service.provider.value,
                 disclaimer=analysis.get("disclaimer", "⚠️ AI-generated analysis. Verify independently."),
             )
+            
+            # ============================================
+            # CACHE THE RESULT - Save to database for future requests
+            # ============================================
+            try:
+                # Serialize complex objects to JSON
+                issues_json = json.dumps([i.model_dump() for i in issues]) if issues else None
+                market_comp_json = json.dumps(market_comp.model_dump()) if market_comp else None
+                insider_tips_json = json.dumps(analysis.get("insider_tips")) if analysis.get("insider_tips") else None
+                neg_strategy_json = json.dumps(neg_strategy.model_dump()) if neg_strategy else None
+                doc_breakdown_json = json.dumps(doc_breakdown.model_dump()) if doc_breakdown else None
+                insider_analysis_json = json.dumps(insider_analysis_data.model_dump()) if insider_analysis_data else None
+                
+                # Delete existing cache if force_reanalyze
+                db.execute(
+                    text("DELETE FROM audit_results WHERE document_id = :doc_id"),
+                    {"doc_id": document_id}
+                )
+                
+                # Insert new cache
+                db.execute(
+                    text("""
+                        INSERT INTO audit_results (
+                            document_id, score, total_issues, potential_savings,
+                            currency, region, issues_json, market_comparison_json,
+                            insider_tips_json, negotiation_strategy_json,
+                            document_breakdown_json, insider_analysis_json,
+                            summary, ocr_used, ai_provider
+                        ) VALUES (
+                            :doc_id, :score, :total_issues, :savings,
+                            :currency, :region, :issues, :market_comp,
+                            :insider_tips, :neg_strategy,
+                            :doc_breakdown, :insider_analysis,
+                            :summary, :ocr_used, :ai_provider
+                        )
+                    """),
+                    {
+                        "doc_id": document_id,
+                        "score": audit_result.score,
+                        "total_issues": audit_result.total_issues,
+                        "savings": audit_result.potential_savings,
+                        "currency": currency,
+                        "region": region,
+                        "issues": issues_json,
+                        "market_comp": market_comp_json,
+                        "insider_tips": insider_tips_json,
+                        "neg_strategy": neg_strategy_json,
+                        "doc_breakdown": doc_breakdown_json,
+                        "insider_analysis": insider_analysis_json,
+                        "summary": audit_result.summary,
+                        "ocr_used": True,
+                        "ai_provider": ai_service.provider.value,
+                    }
+                )
+                db.commit()
+                logger.info(f"💾 Cached audit result for document {document_id}")
+            except Exception as e:
+                logger.warning(f"Failed to cache audit result: {e}")
+                db.rollback()
+            
+            return audit_result
             
         except Exception as e:
             logger.error(f"AI analysis failed: {e}")
